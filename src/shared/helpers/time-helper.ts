@@ -38,7 +38,6 @@ export const durationInHours = (startTimeStamp: number, endTimeStamp: number): n
 }
 
 export const durationUpToNowInMinutes = (startTimeStamp: number): number => durationInMinutes(startTimeStamp, utcNowTimeStamp())
-
 export const durationUpToNowInHours = (startTimeStamp: number): number => durationInHours(startTimeStamp, utcNowTimeStamp())
 
 export const startOfDayNow = (timeZone?: number): number => {

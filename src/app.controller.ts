@@ -38,15 +38,12 @@ export class AppController {
     console.log(`================================================================`);
 
     console.log(`nowTimeStamp utc: ${nowTimeStamp}`);
-
-    console.log(`================================================================`);
-
     console.log(`nowString utc: ${now}`);
 
     console.log(`================================================================`);
 
-    console.log(`toNowString utc: ${toDate(nowTimeStamp)}`);
-    console.log(`toNowString timezone: ${toDate(nowTimeStamp, 420)}`);
+    console.log(`toDate utc: ${toDate(nowTimeStamp)}`);
+    console.log(`toDate timezone: ${toDate(nowTimeStamp, 420)}`);
 
     console.log(`================================================================`);
 
@@ -91,19 +88,14 @@ export class AppController {
     console.log(`================================================================`);
 
     console.log(`addMHourTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${addHourTimeStamp(1624112855, 2)}`);
-
-    console.log(`================================================================`);
-
     console.log(`addMinuteTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${addMinuteTimeStamp(1624112855, 5)}`);
 
     console.log(`================================================================`);
 
     console.log(`addHourNow utc : ${addHourNow(2)}`);
-
-    console.log(`================================================================`);
-
     console.log(`addMinuteNow utc : ${addMinuteNow(5)}`);
 
+    console.log(`================================================================`);
 
     return {
       ABAS: moment().utc(),
