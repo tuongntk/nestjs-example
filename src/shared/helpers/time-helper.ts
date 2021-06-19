@@ -54,18 +54,18 @@ export const startOfDayUtcNow = (): number => moment().utc().startOf('day').unix
 export const startOfDayUtcTimeStamp = (timeStampUtc: number): number => moment.unix(timeStampUtc).utc().startOf('day').unix()
 
 export const getDayOfWeekUtcNow = (): number => moment().utc().day()
-export const getDayOfWeekTimeStamp = (timeStampUtc: number): number => moment.unix(timeStampUtc).utc().day()
+export const getDayOfWeekUtcTimeStamp = (timeStampUtc: number): number => moment.unix(timeStampUtc).utc().day()
 
-export const getHourTimeStampUtc = (timeStampUtc: number): number => moment.unix(timeStampUtc).utc().hour()
-export const getMinuteTimeStamp = (timeStampUtc: number, timeZone?: number): number => moment.unix(timeStampUtc).utc().minute()
+export const getHourUtcTimeStamp = (timeStampUtc: number): number => moment.unix(timeStampUtc).utc().hour()
+export const getMinuteUtcTimeStamp = (timeStampUtc: number, timeZone?: number): number => moment.unix(timeStampUtc).utc().minute()
 
 export const addHourUtcNow = (hours: number = 0): number => moment().utc().add(hours, 'hours').unix()
 export const addMinuteUtcNow = (minutes: number = 0): number => moment().utc().add(minutes, 'minutes').unix()
 
-export const addHourTimeStampUtc = (timeStampUtc: number, hours: number = 0): number => moment.unix(timeStampUtc).utc().add(hours, 'hours').unix()
-export const addMinuteTimeStampUtc = (timeStampUtc: number, minutes: number = 0): number => moment.unix(timeStampUtc).utc().add(minutes, 'minutes').unix()
+export const addHourUtcTimeStamp = (timeStampUtc: number, hours: number = 0): number => moment.unix(timeStampUtc).utc().add(hours, 'hours').unix()
+export const addMinuteUtcTimeStamp = (timeStampUtc: number, minutes: number = 0): number => moment.unix(timeStampUtc).utc().add(minutes, 'minutes').unix()
 
-export function getBlockListOfTimes(startTimeStampUtc: number, endTimeStampUtc: number, interval: number = 30): number[] {
+export function getBlockListOfUtcTimes(startTimeStampUtc: number, endTimeStampUtc: number, interval: number = 30): number[] {
     let startTimeUtc = toUtcDate(startTimeStampUtc)
     const endTimeUtc = toUtcDate(endTimeStampUtc)
 
