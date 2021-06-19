@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 
 import { AppService } from './app.service';
 import { formatTo } from './shared/helpers/number-helper';
-import { durationInMinutes, utcNowTimeStamp, utcNow, toDate, toFormat, durationUpToNowInMinutes, isValidDate } from './shared/helpers/time-helper';
+import { durationInMinutes, utcNowTimeStamp, utcNow, toDate, toFormat, durationUpToNowInMinutes, isValidDate, startOfDayNowTimeStamp, startOfDayTimeStamp } from './shared/helpers/time-helper';
 
 import * as moment from "moment";
 
@@ -58,8 +58,13 @@ export class AppController {
 
     console.log(`================================================================`);
 
-    console.log(`toNowTimeStamp start of the day utc: ${moment().utc().startOf('day').unix()}`);
-    console.log(`toNowTimeStamp start of the day timezone: ${moment().utcOffset(tz).startOf('day').unix()}`);
+    console.log(`toNowTimeStamp start of the day utc: ${startOfDayNowTimeStamp()}`);
+    console.log(`toNowTimeStamp start of the day timezone: ${startOfDayNowTimeStamp(420)}`);
+
+    console.log(`================================================================`);
+
+    console.log(`toTimeStamp start of the day utc: ${startOfDayTimeStamp(startTime)}`);
+    console.log(`toTimeStamp start of the day timezone: ${startOfDayTimeStamp(startTime, 420)}`);
 
     return {
       ABAS: moment().utc(),

@@ -40,3 +40,11 @@ export const durationInHours = (startTimeStamp: number, endTimeStamp: number): n
 export const durationUpToNowInMinutes = (startTimeStamp: number): number => durationInMinutes(startTimeStamp, utcNowTimeStamp())
 
 export const durationUpToNowInHours = (startTimeStamp: number): number => durationInHours(startTimeStamp, utcNowTimeStamp())
+
+export const startOfDayNowTimeStamp = (timeZone?: number): number => {
+    return timeZone ? moment().utcOffset(timeZone).startOf('day').unix() : moment().utc().startOf('day').unix()
+}
+
+export const startOfDayTimeStamp = (timeStamp: number, timeZone?: number): number => {
+    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).startOf('day').unix() : moment.unix(timeStamp).utc().startOf('day').unix()
+}
