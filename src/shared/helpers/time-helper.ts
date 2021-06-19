@@ -64,3 +64,19 @@ export const getHourTimeStamp = (timeStamp: number, timeZone?: number): number =
 export const getMinuteTimeStamp = (timeStamp: number, timeZone?: number): number => {
     return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).minute() : moment.unix(timeStamp).utc().minute()
 }
+
+export const addHourNow = (hours: number = 0): number => moment().utc().add(hours, 'hours').unix()
+export const addMinuteNow = (minutes: number = 0): number => moment().utc().add(minutes, 'minutes').unix()
+export const addHourTimeStamp = (timeStamp: number, hours: number = 0): number => moment.unix(timeStamp).utc().add(hours, 'hours').unix()
+export const addMinuteTimeStamp = (timeStamp: number, minutes: number = 0): number => moment.unix(timeStamp).utc().add(minutes, 'minutes').unix()
+
+export function getBlockListOfTimes(startTimeStamp: number, endTimeStamp: number, interval: number = 30): number[] {
+    let startTime = toDate(startTimeStamp)
+    const endTime = toDate(endTimeStamp)
+
+    while (startTime < endTime) {
+
+    }
+
+    return [];
+}

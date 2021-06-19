@@ -2,7 +2,9 @@ import { Controller, Get } from '@nestjs/common';
 
 import { AppService } from './app.service';
 import { formatTo } from './shared/helpers/number-helper';
-import { durationInMinutes, utcNowTimeStamp, utcNow, toDate, toFormat, durationUpToNowInMinutes, isValidDate, startOfDayNow, startOfDayTimeStamp, getDayOfWeekNow, getDayOfWeekTimeStamp, getMinuteTimeStamp, getHourTimeStamp } from './shared/helpers/time-helper';
+import { durationInMinutes, utcNowTimeStamp, utcNow, toDate, toFormat, durationUpToNowInMinutes, isValidDate, startOfDayNow, startOfDayTimeStamp, 
+  getDayOfWeekNow, getDayOfWeekTimeStamp, getMinuteTimeStamp, getHourTimeStamp, 
+  addMinuteTimeStamp, addMinuteNow, addHourNow, addHourTimeStamp } from './shared/helpers/time-helper';
 
 import * as moment from "moment";
 
@@ -85,6 +87,23 @@ export class AppController {
 
     console.log(`getMinuteTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${getMinuteTimeStamp(1624112855)}`);
     console.log(`getMinuteTimeStamp timezone Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${getMinuteTimeStamp(1624112855, 420)}`);
+
+    console.log(`================================================================`);
+
+    console.log(`addMHourTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${addHourTimeStamp(1624112855, 2)}`);
+
+    console.log(`================================================================`);
+
+    console.log(`addMinuteTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${addMinuteTimeStamp(1624112855, 5)}`);
+
+    console.log(`================================================================`);
+
+    console.log(`addHourNow utc : ${addHourNow(2)}`);
+
+    console.log(`================================================================`);
+
+    console.log(`addMinuteNow utc : ${addMinuteNow(5)}`);
+
 
     return {
       ABAS: moment().utc(),
