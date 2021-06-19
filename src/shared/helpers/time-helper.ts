@@ -1,38 +1,42 @@
 import * as moment from "moment";
 import { roundTo } from "./number-helper";
 
+export const utcNow = (): moment.Moment => moment().utc()
+export const utcNowTimeStamp = (): number => moment().utc().unix()
+
 export function isValidDate(timeStamp: number, timeZone?: number): boolean {
-    return moment.unix(timeStamp).isValid()
+    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).isValid() : moment.unix(timeStamp).isValid()
 }
 
 export function guardValidDate(timeStamp: number, timeZone?: number) {
-    if (!isValidDate(timeStamp)) {
+    if (!isValidDate(timeStamp, timeZone)) {
         throw new Error('Invalid datetime timestamp format');
     }
 }
 
-export function utcNow(timeZone?: number): moment.Moment {
-    return moment().utc()
+export const toDate = (timeStamp: number, timeZone?: number): moment.Moment => {
+    guardValidDate(timeStamp, timeZone)
+    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone) : moment.unix(timeStamp).utc()
 }
 
-export function utcNowTimeStamp(timeZone?: number): number {
-    return moment().utc().unix()
+export const toFormat = (timeStamp: number, format?: string, timeZone?: number): string => {
+    guardValidDate(timeStamp, timeZone)
+
+    if (!format) {
+        return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).format() : moment.unix(timeStamp).utc().format()
+    }
+
+    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).format(format) : moment.unix(timeStamp).utc().format(format)
 }
 
-export function toDate(timeStamp: number, timeZone?: number): moment.Moment {
-    guardValidDate(timeStamp)
-    return moment.unix(timeStamp)
+export const durationInMinutes = (startTimeStamp: number, endTimeStamp: number): number => {
+    return roundTo(moment.duration(toDate(endTimeStamp).diff(toDate(startTimeStamp))).asMinutes())
 }
 
-export function toDateTimeStamp(timeStamp: number, timeZone?: number): number {
-    guardValidDate(timeStamp)
-    return moment.unix(timeStamp).unix()
+export const durationInHours = (startTimeStamp: number, endTimeStamp: number): number => {
+    return roundTo(moment.duration(toDate(endTimeStamp).diff(toDate(startTimeStamp))).asHours())
 }
 
-export const durationInMinutes = (startTimeStamp: number, endTimeStamp: number): number => roundTo(moment.duration(toDate(endTimeStamp).diff(toDate(startTimeStamp))).asMinutes())
+export const durationUpToNowInMinutes = (startTimeStamp: number): number => durationInMinutes(startTimeStamp, utcNowTimeStamp())
 
-export const durationInHours = (startTimeStamp: number, endTimeStamp: number): number => roundTo(moment.duration(toDate(endTimeStamp).diff(toDate(startTimeStamp))).asHours())
-
-export const durationInMinutesUpToNow = (startTimeStamp: number): number => durationInMinutes(startTimeStamp, utcNowTimeStamp())
-
-export const durationInHoursUpToNow = (startTimeStamp: number): number => durationInHours(startTimeStamp, utcNowTimeStamp())
+export const durationUpToNowInHours = (startTimeStamp: number): number => durationInHours(startTimeStamp, utcNowTimeStamp())
