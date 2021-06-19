@@ -41,10 +41,18 @@ export const durationUpToNowInMinutes = (startTimeStamp: number): number => dura
 
 export const durationUpToNowInHours = (startTimeStamp: number): number => durationInHours(startTimeStamp, utcNowTimeStamp())
 
-export const startOfDayNowTimeStamp = (timeZone?: number): number => {
+export const startOfDayNow = (timeZone?: number): number => {
     return timeZone ? moment().utcOffset(timeZone).startOf('day').unix() : moment().utc().startOf('day').unix()
 }
 
 export const startOfDayTimeStamp = (timeStamp: number, timeZone?: number): number => {
     return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).startOf('day').unix() : moment.unix(timeStamp).utc().startOf('day').unix()
+}
+
+export const getDayOfWeekNow = (timeZone?: number): number => {
+    return timeZone ? moment().utcOffset(timeZone).day() : moment().utc().day()
+}
+
+export const getDayOfWeekTimeStamp = (timeStamp: number, timeZone?: number): number => {
+    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).day() : moment.unix(timeStamp).utc().day()
 }
