@@ -4,76 +4,72 @@ import { roundTo } from "./number-helper";
 export const utcNow = (): moment.Moment => moment().utc()
 export const utcNowTimeStamp = (): number => moment().utc().unix()
 
-export function isValidDate(timeStamp: number, timeZone?: number): boolean {
-    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).isValid() : moment.unix(timeStamp).isValid()
-}
+export const isValidUtcDate = (timeStampUtc: number): boolean => moment.unix(timeStampUtc).utc().isValid()
+export const isValidLocalDate = (timeStamp: number, timeZone: number): boolean => moment.unix(timeStamp).utcOffset(timeZone).isValid()
 
-export function guardValidDate(timeStamp: number, timeZone?: number) {
-    if (!isValidDate(timeStamp, timeZone)) {
+export function guardValidUtcDate(timeStampUtc: number) {
+    if (!isValidUtcDate(timeStampUtc)) {
         throw new Error('Invalid datetime timestamp format');
     }
 }
 
-export const toDate = (timeStamp: number, timeZone?: number): moment.Moment => {
-    guardValidDate(timeStamp, timeZone)
-    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone) : moment.unix(timeStamp).utc()
-}
-
-export const toFormat = (timeStamp: number, format?: string, timeZone?: number): string => {
-    guardValidDate(timeStamp, timeZone)
-
-    if (!format) {
-        return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).format() : moment.unix(timeStamp).utc().format()
+export function guardValidLocalDate(timeStamp: number, timeZone: number) {
+    if (!isValidLocalDate(timeStamp, timeZone)) {
+        throw new Error('Invalid datetime timestamp format');
     }
-
-    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).format(format) : moment.unix(timeStamp).utc().format(format)
 }
 
-export const durationInMinutes = (startTimeStamp: number, endTimeStamp: number): number => {
-    return roundTo(moment.duration(toDate(endTimeStamp).diff(toDate(startTimeStamp))).asMinutes())
+export const toUtcDate = (timeStampUtc: number): moment.Moment => {
+    guardValidUtcDate(timeStampUtc)
+    return moment.unix(timeStampUtc).utc()
 }
 
-export const durationInHours = (startTimeStamp: number, endTimeStamp: number): number => {
-    return roundTo(moment.duration(toDate(endTimeStamp).diff(toDate(startTimeStamp))).asHours())
+export const toLocalDate = (timeStamp: number, timeZone: number = 420): moment.Moment => {
+    guardValidLocalDate(timeStamp, timeZone)
+    return moment.unix(timeStamp).utcOffset(timeZone)
 }
 
-export const durationUpToNowInMinutes = (startTimeStamp: number): number => durationInMinutes(startTimeStamp, utcNowTimeStamp())
-export const durationUpToNowInHours = (startTimeStamp: number): number => durationInHours(startTimeStamp, utcNowTimeStamp())
-
-export const startOfDayNow = (timeZone?: number): number => {
-    return timeZone ? moment().utcOffset(timeZone).startOf('day').unix() : moment().utc().startOf('day').unix()
+export const toUtcFormat = (timeStampUtc: number, format?: string): string => {
+    guardValidUtcDate(timeStampUtc)
+    return moment.unix(timeStampUtc).utc().format(format)
 }
 
-export const startOfDayTimeStamp = (timeStamp: number, timeZone?: number): number => {
-    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).startOf('day').unix() : moment.unix(timeStamp).utc().startOf('day').unix()
+export const toLocalFormat = (timeStamp: number, timeZone: number = 420, format?: string): string => {
+    guardValidLocalDate(timeStamp, timeZone)
+    return moment.unix(timeStamp).utcOffset(timeZone).format(format)
 }
 
-export const getDayOfWeekNow = (timeZone?: number): number => {
-    return timeZone ? moment().utcOffset(timeZone).day() : moment().utc().day()
+export const durationInMinutes = (startTimeStampUtc: number, endTimeStampUtc: number): number => {
+    return roundTo(moment.duration(toUtcDate(endTimeStampUtc).diff(toUtcDate(startTimeStampUtc))).asMinutes())
 }
 
-export const getDayOfWeekTimeStamp = (timeStamp: number, timeZone?: number): number => {
-    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).day() : moment.unix(timeStamp).utc().day()
+export const durationInHours = (startTimeStampUtc: number, endTimeStampUtc: number): number => {
+    return roundTo(moment.duration(toUtcDate(endTimeStampUtc).diff(toUtcDate(startTimeStampUtc))).asHours())
 }
 
-export const getHourTimeStamp = (timeStamp: number, timeZone?: number): number => {
-    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).hour() : moment.unix(timeStamp).utc().hour()
-}
+export const durationUpToNowInMinutes = (startTimeStampUtc: number): number => durationInMinutes(startTimeStampUtc, utcNowTimeStamp())
+export const durationUpToNowInHours = (startTimeStampUtc: number): number => durationInHours(startTimeStampUtc, utcNowTimeStamp())
 
-export const getMinuteTimeStamp = (timeStamp: number, timeZone?: number): number => {
-    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).minute() : moment.unix(timeStamp).utc().minute()
-}
+export const startOfDayUtcNow = (): number => moment().utc().startOf('day').unix()
+export const startOfDayUtcTimeStamp = (timeStampUtc: number): number => moment.unix(timeStampUtc).utc().startOf('day').unix()
 
-export const addHourNow = (hours: number = 0): number => moment().utc().add(hours, 'hours').unix()
-export const addMinuteNow = (minutes: number = 0): number => moment().utc().add(minutes, 'minutes').unix()
-export const addHourTimeStamp = (timeStamp: number, hours: number = 0): number => moment.unix(timeStamp).utc().add(hours, 'hours').unix()
-export const addMinuteTimeStamp = (timeStamp: number, minutes: number = 0): number => moment.unix(timeStamp).utc().add(minutes, 'minutes').unix()
+export const getDayOfWeekUtcNow = (): number => moment().utc().day()
+export const getDayOfWeekTimeStamp = (timeStampUtc: number): number => moment.unix(timeStampUtc).utc().day()
 
-export function getBlockListOfTimes(startTimeStamp: number, endTimeStamp: number, interval: number = 30): number[] {
-    let startTime = toDate(startTimeStamp)
-    const endTime = toDate(endTimeStamp)
+export const getHourTimeStampUtc = (timeStampUtc: number): number => moment.unix(timeStampUtc).utc().hour()
+export const getMinuteTimeStamp = (timeStampUtc: number, timeZone?: number): number => moment.unix(timeStampUtc).utc().minute()
 
-    while (startTime < endTime) {
+export const addHourUtcNow = (hours: number = 0): number => moment().utc().add(hours, 'hours').unix()
+export const addMinuteUtcNow = (minutes: number = 0): number => moment().utc().add(minutes, 'minutes').unix()
+
+export const addHourTimeStampUtc = (timeStampUtc: number, hours: number = 0): number => moment.unix(timeStampUtc).utc().add(hours, 'hours').unix()
+export const addMinuteTimeStampUtc = (timeStampUtc: number, minutes: number = 0): number => moment.unix(timeStampUtc).utc().add(minutes, 'minutes').unix()
+
+export function getBlockListOfTimes(startTimeStampUtc: number, endTimeStampUtc: number, interval: number = 30): number[] {
+    let startTimeUtc = toUtcDate(startTimeStampUtc)
+    const endTimeUtc = toUtcDate(endTimeStampUtc)
+
+    while (startTimeUtc < endTimeUtc) {
 
     }
 
