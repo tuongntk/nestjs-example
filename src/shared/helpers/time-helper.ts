@@ -56,3 +56,11 @@ export const getDayOfWeekNow = (timeZone?: number): number => {
 export const getDayOfWeekTimeStamp = (timeStamp: number, timeZone?: number): number => {
     return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).day() : moment.unix(timeStamp).utc().day()
 }
+
+export const getHourTimeStamp = (timeStamp: number, timeZone?: number): number => {
+    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).hour() : moment.unix(timeStamp).utc().hour()
+}
+
+export const getMinuteTimeStamp = (timeStamp: number, timeZone?: number): number => {
+    return timeZone ? moment.unix(timeStamp).utcOffset(timeZone).minute() : moment.unix(timeStamp).utc().minute()
+}
