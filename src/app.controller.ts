@@ -2,7 +2,8 @@ import { Controller, Get } from '@nestjs/common';
 
 import { AppService } from './app.service';
 import { formatTo } from './shared/helpers/number-helper';
-import { durationInMinutes, utcNowTimeStamp, utcNow, durationUpToNowInMinutes, toUtcDate, toLocalDate, toUtcFormat, toLocalFormat, startOfDayUtcNow, startOfDayUtcTimeStamp, getDayOfWeekUtcNow, getDayOfWeekUtcTimeStamp, getHourUtcTimeStamp, getMinuteUtcTimeStamp, addHourUtcTimeStamp, addMinuteUtcTimeStamp, addHourUtcNow, addMinuteUtcNow } from './shared/helpers/time-helper';
+import { durationInMinutes, utcNowTimeStamp, utcNow, durationUpToNowInMinutes, toUtcDate, toLocalDate, toUtcFormat, toLocalFormat, startOfDayUtcNow, 
+  startOfDayUtcTimeStamp, getDayOfWeekUtcNow, getDayOfWeekUtcTimeStamp, getHoursUtcTimeStamp, getMinutesUtcTimeStamp, addHoursUtcTimeStamp, addMinutesUtcTimeStamp, addHoursUtcNow, addMinutesUtcNow, newUtcDate, newUtcTimeStamp } from './shared/helpers/time-helper';
 
 import * as moment from "moment";
 import * as momentTz from 'moment-timezone';
@@ -35,6 +36,8 @@ export class AppController {
 
     console.log(`================================================================`);
 
+    console.log(`new Date utc: ${newUtcDate(10, 9, 2021, 10, 28)}`);
+    console.log(`new Date TimeStamp utc: ${newUtcTimeStamp(10, 9, 2021, 10, 28)}`);
     console.log(`nowTimeStamp utc: ${nowUtcTimeStamp}`);
     console.log(`nowString utc: ${nowUtc}`);
 
@@ -65,18 +68,18 @@ export class AppController {
 
     console.log(`================================================================`);
 
-    console.log(`getHourTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${getHourUtcTimeStamp(1624112855)}`);
-    console.log(`getMinuteTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${getMinuteUtcTimeStamp(1624112855)}`);
+    console.log(`getHourTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${getHoursUtcTimeStamp(1624112855)}`);
+    console.log(`getMinuteTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${getMinutesUtcTimeStamp(1624112855)}`);
 
     console.log(`================================================================`);
 
-    console.log(`addMHourTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${addHourUtcTimeStamp(1624112855, 2)}`);
-    console.log(`addMinuteTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${addMinuteUtcTimeStamp(1624112855, 5)}`);
+    console.log(`addMHourTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${addHoursUtcTimeStamp(1624112855, 2)}`);
+    console.log(`addMinuteTimeStamp utc Date and time (your time zone): Saturday, June 19, 2021 21:27:35 GMT+07:00 : ${addMinutesUtcTimeStamp(1624112855, 5)}`);
 
     console.log(`================================================================`);
 
-    console.log(`addHourNow utc : ${addHourUtcNow(2)}`);
-    console.log(`addMinuteNow utc : ${addMinuteUtcNow(5)}`);
+    console.log(`addHourNow utc : ${addHoursUtcNow(2)}`);
+    console.log(`addMinuteNow utc : ${addMinutesUtcNow(5)}`);
 
     console.log(`================================================================`);
 
