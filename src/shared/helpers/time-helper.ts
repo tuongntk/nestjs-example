@@ -96,19 +96,40 @@ export const addMinutesUtcTimeStamp = (timeStampUtc: number, minutes: number = 0
 const addMinutesUtc = (dateUtc: moment.Moment, minutes: number = 0): moment.Moment => dateUtc.add(minutes, 'minutes')
 const getMinutesUtc = (dateUtc: moment.Moment): number => dateUtc.minute()
 
-export function getBlockListOfUtcTimes(startTimeStampUtc: number, endTimeStampUtc: number, interval: number = 30): number[] {
-    let blocks = [];
-    let startTimeUtc = toUtcDate(startTimeStampUtc)
-    const endTimeUtc = toUtcDate(endTimeStampUtc)
+export function getBlockListOfUtcTimesTimeStamp(startTimeStampUtc: number, endTimeStampUtc: number, interval: number = 30): number[] {
+    return getBlockListOfUtcTimesDate(toUtcDate(startTimeStampUtc), toUtcDate(endTimeStampUtc), interval)
+}
 
-    while (startTimeUtc < endTimeUtc) {
-        const currentMinutes = getMinutesUtc(startTimeUtc)
+const getCurrentDurationInMinutes = (currentMinutes: number, interval: number): number => {
+    let duration = currentMinutes
 
-        let duration = (currentMinutes > interval) ? currentMinutes - interval : interval - currentMinutes;
-
-
-        startTimeUtc = addMinutesUtc(startTimeUtc, interval)
+    while (duration > interval) {
+        duration = duration - interval
     }
 
-    return blocks;
+    return duration > interval ? duration - interval : (interval === duration ? interval : interval - duration)
+}
+
+export function getBlockListOfUtcTimesDate(startTimeUtc: moment.Moment, endTimeUtc: moment.Moment, interval: number = 30): number[] {
+    let blocks = []
+    let start = startTimeUtc
+
+    while (start < endTimeUtc) {
+        const currentMinutes = getMinutesUtc(start)
+
+        let duration = getCurrentDurationInMinutes(currentMinutes, interval)
+
+        start = addMinutesUtc(start, duration)
+        if (start <= endTimeUtc) {
+            blocks.push(duration)
+        } else {
+            const endMinutes = getMinutesUtc(start) - getMinutesUtc(endTimeUtc)
+            const endDuration = interval - endMinutes
+            blocks.push(endDuration)
+        }
+
+        console.log(`currentMinutes: ${currentMinutes} - duration: ${duration} - added date: ${start}`)
+    }
+
+    return blocks
 }
