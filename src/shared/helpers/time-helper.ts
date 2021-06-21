@@ -93,6 +93,10 @@ export const addMinutesUtcNow = (minutes: number = 0): number => utcNow().add(mi
 export const addHoursUtcTimeStamp = (timeStampUtc: number, hours: number = 0): number => toUtcDate(timeStampUtc).add(hours, 'hours').unix()
 export const addMinutesUtcTimeStamp = (timeStampUtc: number, minutes: number = 0): number => toUtcDate(timeStampUtc).add(minutes, 'minutes').unix()
 
+export const startOfLocalTodayTimeStamp = (timeZone: number = 420): number => {
+    return moment().utcOffset(timeZone).startOf('day').unix()
+}
+
 const addMinutesUtc = (dateUtc: moment.Moment, minutes: number = 0): moment.Moment => dateUtc.add(minutes, 'minutes')
 const getMinutesUtc = (dateUtc: moment.Moment): number => dateUtc.minute()
 
@@ -117,18 +121,16 @@ export function getBlockListOfUtcTimesDate(startTimeUtc: moment.Moment, endTimeU
     while (start < endTimeUtc) {
         const currentMinutes = getMinutesUtc(start)
 
-        let duration = getCurrentDurationInMinutes(currentMinutes, interval)
+        let stepDuration = getCurrentDurationInMinutes(currentMinutes, interval)
+        let duration = stepDuration
 
-        start = addMinutesUtc(start, duration)
-        if (start <= endTimeUtc) {
-            blocks.push(duration)
-        } else {
-            const endMinutes = getMinutesUtc(start) - getMinutesUtc(endTimeUtc)
-            const endDuration = interval - endMinutes
-            blocks.push(endDuration)
+        start = addMinutesUtc(start, stepDuration)
+        if (start > endTimeUtc) {
+            duration = interval - (getMinutesUtc(start) - getMinutesUtc(endTimeUtc))
         }
 
-        console.log(`currentMinutes: ${currentMinutes} - duration: ${duration} - added date: ${start}`)
+        blocks.push(duration)
+        console.log(`currentMinutes: ${currentMinutes} - step duration: ${stepDuration} - duration: ${duration} - added date: ${start}`)
     }
 
     return blocks
