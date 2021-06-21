@@ -100,8 +100,14 @@ export const startOfLocalTodayTimeStamp = (timeZone: number = 420): number => {
 const addMinutesUtc = (dateUtc: moment.Moment, minutes: number = 0): moment.Moment => dateUtc.add(minutes, 'minutes')
 const getMinutesUtc = (dateUtc: moment.Moment): number => dateUtc.minute()
 
-export function getBlockListOfUtcTimesTimeStamp(startTimeStampUtc: number, endTimeStampUtc: number, interval: number = 30): number[] {
-    return getBlockListOfUtcTimesDate(toUtcDate(startTimeStampUtc), toUtcDate(endTimeStampUtc), interval)
+export class BlockOfMinutes {
+    duration: number
+    hoursSoFar: number
+
+    constructor(duration: number, hoursSoFar: number) {
+        this.duration = duration;
+        this.hoursSoFar = hoursSoFar;
+    }
 }
 
 const getCurrentDurationInMinutes = (currentMinutes: number, interval: number): number => {
@@ -114,13 +120,14 @@ const getCurrentDurationInMinutes = (currentMinutes: number, interval: number): 
     return duration > interval ? duration - interval : (interval === duration ? interval : interval - duration)
 }
 
-export function getBlockListOfUtcTimesDate(startTimeUtc: moment.Moment, endTimeUtc: moment.Moment, interval: number = 30): number[] {
-    let blocks = []
+export function getBlockListOfUtcTimesDate(startTimeUtc: moment.Moment, endTimeUtc: moment.Moment, interval: number = 30): BlockOfMinutes[] {
+    let blocks: BlockOfMinutes[] = []
     let start = startTimeUtc
+    let totalHoursSofar = 0
 
     while (start < endTimeUtc) {
         const currentMinutes = getMinutesUtc(start)
-
+        
         let stepDuration = getCurrentDurationInMinutes(currentMinutes, interval)
         let duration = stepDuration
 
@@ -129,9 +136,14 @@ export function getBlockListOfUtcTimesDate(startTimeUtc: moment.Moment, endTimeU
             duration = interval - (getMinutesUtc(start) - getMinutesUtc(endTimeUtc))
         }
 
-        blocks.push(duration)
+        totalHoursSofar += roundTo(duration / 60)
+        blocks.push(new BlockOfMinutes(duration, totalHoursSofar))
         console.log(`currentMinutes: ${currentMinutes} - step duration: ${stepDuration} - duration: ${duration} - added date: ${start}`)
     }
 
     return blocks
+}
+
+export function getBlockListOfUtcTimesTimeStamp(startTimeStampUtc: number, endTimeStampUtc: number, interval: number = 30): BlockOfMinutes[] {
+    return getBlockListOfUtcTimesDate(toUtcDate(startTimeStampUtc), toUtcDate(endTimeStampUtc), interval)
 }
